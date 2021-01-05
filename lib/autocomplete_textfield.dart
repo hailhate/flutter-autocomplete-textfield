@@ -305,50 +305,50 @@ class AutoCompleteTextFieldState<T> extends State<AutoCompleteTextField> {
       final width = textFieldSize.width;
       final height = textFieldSize.height + (widget.suggestionTopMargin ?? 0.0);
       listSuggestionsEntry = new OverlayEntry(builder: (context) {
-        return Material(
-          child: new Positioned(
-              width: width,
-              child: CompositedTransformFollower(
-                  link: _layerLink,
-                  showWhenUnlinked: false,
-                  offset: Offset(0.0, height),
-                  child: new SizedBox(
-                      width: width,
-                      child: Column(
-                        children: [
-                          if (widget.suggestionSeparator != null &&
-                              filteredSuggestions != null &&
-                              filteredSuggestions.isNotEmpty)
-                            widget.suggestionSeparator,
-                          ...filteredSuggestions.map((suggestion) {
-                            return new Row(children: [
-                              new Expanded(
-                                  child: new GestureDetector(
-                                      child: itemBuilder(context, suggestion),
-                                      onTap: () {
-                                        setState(() {
-                                          if (submitOnSuggestionTap) {
-                                            String newText =
-                                                suggestion.toString();
-                                            textField.controller.text = newText;
-                                            textField.focusNode.unfocus();
-                                            itemSubmitted(suggestion);
-                                            if (clearOnSubmit) {
-                                              clear();
-                                            }
-                                          } else {
-                                            String newText =
-                                                suggestion.toString();
-                                            textField.controller.text = newText;
-                                            textChanged(newText);
+        return Positioned(
+            width: width,
+            child: CompositedTransformFollower(
+                link: _layerLink,
+                showWhenUnlinked: false,
+                offset: Offset(0.0, height),
+                child: new SizedBox(
+                    width: width,
+                    child: Column(
+                      children: [
+                        if (widget.suggestionSeparator != null &&
+                            filteredSuggestions != null &&
+                            filteredSuggestions.isNotEmpty)
+                          widget.suggestionSeparator,
+                        ...filteredSuggestions.map((suggestion) {
+                          return new Row(children: [
+                            new Expanded(
+                                child: new GestureDetector(
+                                    child: Material(
+                                        child:
+                                            itemBuilder(context, suggestion)),
+                                    onTap: () {
+                                      setState(() {
+                                        if (submitOnSuggestionTap) {
+                                          String newText =
+                                              suggestion.toString();
+                                          textField.controller.text = newText;
+                                          textField.focusNode.unfocus();
+                                          itemSubmitted(suggestion);
+                                          if (clearOnSubmit) {
+                                            clear();
                                           }
-                                        });
-                                      }))
-                            ]);
-                          }).toList()
-                        ],
-                      )))),
-        );
+                                        } else {
+                                          String newText =
+                                              suggestion.toString();
+                                          textField.controller.text = newText;
+                                          textChanged(newText);
+                                        }
+                                      });
+                                    }))
+                          ]);
+                        }).toList()
+                      ],
+                    ))));
       });
       Overlay.of(context).insert(listSuggestionsEntry);
     }
